@@ -19,6 +19,7 @@ public class CodeFileController {
 
   @GetMapping("/v1/files/{challengeId}")
   public Flux<CodeFile> findAllByProjectIdIs(@PathVariable final String challengeId) {
+
     return codeFileRepository.findAllByProjectIdOrderByLocationAsc(challengeId);
   }
 

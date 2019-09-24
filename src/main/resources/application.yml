@@ -1,19 +1,14 @@
 spring:
   application:
     name: challenges-io
-  data:
-    mongodb:
-      host: localhost
-      username: admin
-      password: challenger-password
-
-server:
-  port: 9091
 
 challenges:
   cloc: "/Users/chris/IdeaProjects/challenge/src/main/resources/cloc-1.82.pl"
 
 ---
+server:
+  port: 9091
+
 spring:
   profiles: production
   data:

@@ -27,13 +27,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-    // https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
     compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.5.0.201909110433-r'
     compile group: 'org.eclipse.mylyn.github', name: 'org.eclipse.egit.github.core', version: '2.1.5'
 
-
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
-
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

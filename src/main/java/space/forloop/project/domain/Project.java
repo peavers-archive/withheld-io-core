@@ -28,6 +28,12 @@ public class Project {
 
   private String notes;
 
+  private String position;
+
+  private String level;
+
+  private String lever;
+
   private CLOC cloc;
 
   private Author author;
@@ -36,5 +42,5 @@ public class Project {
 
   @Builder.Default private long created = Instant.now().toEpochMilli();
 
-  @Builder.Default private ArrayList<String> reviewers = new ArrayList<>();
+  @Builder.Default private ArrayList<Feedback> feedback = new ArrayList<>();
 }

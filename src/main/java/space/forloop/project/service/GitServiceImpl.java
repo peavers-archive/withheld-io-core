@@ -49,6 +49,10 @@ public class GitServiceImpl implements GitService {
               .repository(repository)
               .notes(project.getNotes())
               .source(project.getSource())
+              .notes(project.getNotes())
+              .level(project.getLevel())
+              .position(project.getPosition())
+              .lever(project.getLever())
               .workingDirectory(tempDirectory.getAbsolutePath())
               .build());
 

@@ -22,6 +22,11 @@ public class ProjectController {
     return projectService.create(project);
   }
 
+  @PatchMapping("/v1/challenges")
+  public Mono<Project> patch(@RequestBody final Project project) {
+    return projectService.patch(project);
+  }
+
   @GetMapping("/v1/challenges/{challengeId}")
   public Mono<Project> findById(@PathVariable final String challengeId) {
     return projectService.findById(challengeId);

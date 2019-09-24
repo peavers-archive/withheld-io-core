@@ -27,6 +27,11 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public Mono<Project> create(final Project project) {
+
+    if (!project.getSource().startsWith("https://github.com/")) {
+      return Mono.error(new UnsupportedOperationException("Only GitHub is supported right now"));
+    }
+
     return gitService
         .clone(project)
         .doOnNext(
@@ -38,6 +43,11 @@ public class ProjectServiceImpl implements ProjectService {
                 log.error("deleting working directory failed {}", e.getMessage());
               }
             });
+  }
+
+  @Override
+  public Mono<Project> patch(final Project project) {
+    return projectRepository.save(project);
   }
 
   @Override
