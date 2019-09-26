@@ -8,7 +8,7 @@ import org.eclipse.egit.github.core.Repository;
 import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 /** @author Chris Turner (chris@forloop.space) */
@@ -26,8 +26,6 @@ public class Project {
 
   private String workingDirectory;
 
-  private String notes;
-
   private String position;
 
   private String level;
@@ -42,5 +40,7 @@ public class Project {
 
   @Builder.Default private long created = Instant.now().toEpochMilli();
 
-  @Builder.Default private ArrayList<Feedback> feedback = new ArrayList<>();
+  @Builder.Default private HashSet<Author> reviewers = new HashSet<>();
+
+  @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
 }

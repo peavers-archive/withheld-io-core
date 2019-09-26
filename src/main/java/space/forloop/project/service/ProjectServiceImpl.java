@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import space.forloop.project.domain.Author;
+import space.forloop.project.domain.Comment;
 import space.forloop.project.domain.Project;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.repositories.ProjectRepository;
@@ -53,6 +55,26 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Mono<Project> findById(final String id) {
     return projectRepository.findById(id);
+  }
+
+  @Override
+  public Flux<Comment> getProjectComments(final String id) {
+    return codeFileRepository
+        .findAllByProjectIdOrderByLocationAsc(id)
+        .flatMap(codeFile -> Flux.fromIterable(codeFile.getCodeLines()))
+        .flatMap(codeLine -> Flux.fromIterable(codeLine.getComments()));
+  }
+
+  @Override
+  public Flux<Author> getProjectReviewers(final String id) {
+    return getProjectComments(id)
+        .groupBy(Comment::getAuthor)
+        .flatMap(
+            commentGroupedFlux ->
+                commentGroupedFlux.reduce(
+                    (a, b) ->
+                        a.getAuthor().getEmail().compareTo(b.getAuthor().getEmail()) > 0 ? a : b))
+        .map(Comment::getAuthor);
   }
 
   @Override

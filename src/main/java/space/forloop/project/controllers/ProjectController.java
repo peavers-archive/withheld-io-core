@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import space.forloop.project.domain.Author;
+import space.forloop.project.domain.Comment;
 import space.forloop.project.domain.Project;
 import space.forloop.project.service.ProjectService;
 
@@ -40,5 +42,15 @@ public class ProjectController {
   @DeleteMapping("/v1/challenges/{challengeId}")
   public Mono<Void> delete(@PathVariable final String challengeId) {
     return projectService.delete(challengeId);
+  }
+
+  @GetMapping("/v1/comments/{challengeId}")
+  public Flux<Comment> getProjectComments(@PathVariable final String challengeId) {
+    return projectService.getProjectComments(challengeId);
+  }
+
+  @GetMapping("/v1/reviewers/{challengeId}")
+  public Flux<Author> getProjectReviewers(@PathVariable final String challengeId) {
+    return projectService.getProjectReviewers(challengeId);
   }
 }
