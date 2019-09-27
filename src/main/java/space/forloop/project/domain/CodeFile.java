@@ -21,5 +21,7 @@ public class CodeFile {
 
   private String projectId;
 
+  private CLOC cloc;
+
   @Builder.Default private ArrayList<CodeLine> codeLines = new ArrayList<>();
 }

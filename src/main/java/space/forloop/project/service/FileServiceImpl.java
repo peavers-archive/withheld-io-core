@@ -1,5 +1,6 @@
 package space.forloop.project.service;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,6 @@ public class FileServiceImpl implements FileService {
     final Path dir = Paths.get(directory);
 
     getFilePaths(dir).forEach(path -> createCodeFile(path.toPath(), project).subscribe());
-    project.setCloc(createCLOC(project));
 
     return projectRepository.save(project);
   }
@@ -90,23 +90,25 @@ public class FileServiceImpl implements FileService {
     }
   }
 
-  private CLOC createCLOC(final Project project) {
+  private CLOC createCLOC(final Path path) {
 
     final ArrayList<String> commands = new ArrayList<>();
 
     commands.add("perl");
     commands.add(cloc);
     commands.add("--json");
-    commands.add(project.getWorkingDirectory());
+    commands.add(path.toFile().getAbsolutePath());
 
     try {
       final String execute = processService.execute(commands);
 
       final ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+
       return objectMapper.readValue(execute, CLOC.class);
 
     } catch (final IOException | InterruptedException e) {
-      e.printStackTrace();
+      log.info("unable to create CLOC for {}", path);
     }
     return null;
   }
