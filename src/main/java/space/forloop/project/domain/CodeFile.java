@@ -1,5 +1,6 @@
 package space.forloop.project.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CodeFile {
 
   @Id private String id;
@@ -22,6 +24,10 @@ public class CodeFile {
   private String projectId;
 
   private CLOC cloc;
+
+  private long size;
+
+  private long codeLinesSize;
 
   @Builder.Default private ArrayList<CodeLine> codeLines = new ArrayList<>();
 }

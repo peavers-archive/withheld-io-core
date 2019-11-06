@@ -67,19 +67,23 @@ public class FileServiceImpl implements FileService {
 
   private Mono<CodeFile> createCodeFile(final Path path, final Project project) {
 
-    final CodeFile codeFile =
-        CodeFile.builder()
-            .projectId(project.getId())
-            .location(Paths.get(project.getWorkingDirectory()).relativize(path).toString())
-            .build();
-
     try {
+
+      final CodeFile codeFile =
+          CodeFile.builder()
+              .projectId(project.getId())
+              .location(Paths.get(project.getWorkingDirectory()).relativize(path).toString())
+              .size(Files.size(path))
+              .build();
+
       codeFile
           .getCodeLines()
           .addAll(
               Files.readAllLines(path, StandardCharsets.UTF_8).stream()
                   .map(line -> CodeLine.builder().body(line).build())
                   .collect(Collectors.toList()));
+
+      codeFile.setCodeLinesSize(codeFile.getCodeLines().size());
 
       return codeFileRepository.save(codeFile);
 

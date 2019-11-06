@@ -2,10 +2,9 @@ package space.forloop.project.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.egit.github.core.Repository;
-import org.eclipse.egit.github.core.User;
 import org.eclipse.egit.github.core.service.RepositoryService;
-import org.eclipse.egit.github.core.service.UserService;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.Author;
 import space.forloop.project.domain.Project;
+import space.forloop.project.utils.MD5Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,13 +40,13 @@ public class GitServiceImpl implements GitService {
 
       log.info("Git base {}", git.getRepository().getDirectory());
 
-      final Author author = getAuthorDetails(project);
-      final Repository repository = getRepositoryDetails(project);
+      final Author author = getAuthorDetails();
+      final Repository repositoryDetails = getRepositoryDetails(project);
 
       return fileService.importFiles(
           Project.builder()
               .author(author)
-              .repository(repository)
+              .repository(repositoryDetails)
               .source(project.getSource())
               .level(project.getLevel())
               .position(project.getPosition())
@@ -77,28 +77,12 @@ public class GitServiceImpl implements GitService {
     return null;
   }
 
-  private Author getAuthorDetails(final Project project) {
+  private Author getAuthorDetails() {
+    final String name = RandomStringUtils.random(6, "123456789");
+    final String avatar =
+        "https://www.gravatar.com/avatar/" + MD5Util.md5Hex(name) + "?s=64&d=identicon&r=PG";
 
-    final String[] details =
-        Objects.requireNonNull(formatGithubUrlForApi(project.getSource())).split("/");
-
-    final UserService userService = new UserService();
-    final User user;
-
-    try {
-      user = userService.getUser(details[0]);
-
-      final String avatarUrl = user.getAvatarUrl();
-      final String email = user.getEmail();
-      final String name = user.getName();
-
-      return Author.builder().avatarUrl(avatarUrl).email(email).name(name).build();
-
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-
-    return null;
+    return Author.builder().avatarUrl(avatar).name(name).build();
   }
 
   private File getTempDirectory() {
