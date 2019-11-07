@@ -78,9 +78,11 @@ public class GitServiceImpl implements GitService {
   }
 
   private Author getAuthorDetails() {
-    final String name = RandomStringUtils.random(6, "123456789");
+    final String name = RandomStringUtils.random(6, "1234567890");
+
     final String avatar =
-        "https://www.gravatar.com/avatar/" + MD5Util.md5Hex(name) + "?s=64&d=identicon&r=PG";
+        String.format(
+            "https://www.gravatar.com/avatar/%s?s=64&d=identicon&r=PG", MD5Util.md5Hex(name));
 
     return Author.builder().avatarUrl(avatar).name(name).build();
   }
