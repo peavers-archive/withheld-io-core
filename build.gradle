@@ -33,6 +33,7 @@ dependencies {
     compile group: 'org.eclipse.mylyn.github', name: 'org.eclipse.egit.github.core', version: '2.1.5'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.8'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

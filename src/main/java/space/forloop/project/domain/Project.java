@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.eclipse.egit.github.core.Repository;
 import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
@@ -30,17 +29,18 @@ public class Project {
 
   private String level;
 
-  private String lever;
+  private String applicant;
 
-  private CLOC cloc;
+  @Builder.Default
+  private boolean underReview = true;
 
-  private Author author;
+  @Builder.Default
+  private long created = Instant.now().toEpochMilli();
 
-  private Repository repository;
+  @Builder.Default
+  private HashSet<Reviewer> reviewers = new HashSet<>();
 
-  @Builder.Default private long created = Instant.now().toEpochMilli();
+  @Builder.Default
+  private HashSet<Feedback> feedback = new HashSet<>();
 
-  @Builder.Default private HashSet<Author> reviewers = new HashSet<>();
-
-  @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
 }

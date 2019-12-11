@@ -2,9 +2,9 @@ package space.forloop.project.service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import space.forloop.project.domain.Author;
 import space.forloop.project.domain.Comment;
 import space.forloop.project.domain.Project;
+import space.forloop.project.domain.Reviewer;
 
 /** @author Chris Turner (chris@forloop.space) */
 public interface ProjectService {
@@ -21,5 +21,5 @@ public interface ProjectService {
 
   Flux<Comment> getProjectComments(String id);
 
-  Flux<Author> getProjectReviewers(String id);
+  Flux<Reviewer> getProjectReviewers(String id);
 }

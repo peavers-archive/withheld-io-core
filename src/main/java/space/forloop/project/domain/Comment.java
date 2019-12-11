@@ -17,7 +17,7 @@ public class Comment {
 
   @Builder.Default private String id = UUID.randomUUID().toString();
 
-  private Author author;
+  private Reviewer reviewer;
 
   private String body;
 

@@ -6,9 +6,9 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import space.forloop.project.domain.Author;
 import space.forloop.project.domain.Comment;
 import space.forloop.project.domain.Project;
+import space.forloop.project.domain.Reviewer;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.repositories.ProjectRepository;
 
@@ -30,9 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Mono<Project> create(final Project project) {
 
-    if (!project.getSource().startsWith("https://github.com/")) {
-      return Mono.error(new UnsupportedOperationException("Only GitHub is supported right now"));
-    }
+    log.info("creating {}", project);
 
     return gitService
         .clone(project)
@@ -49,12 +47,14 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public Mono<Project> patch(final Project project) {
-    return projectRepository.save(project);
+
+    return projectRepository.save(underReview(project));
   }
 
   @Override
   public Mono<Project> findById(final String id) {
-    return projectRepository.findById(id);
+
+    return projectRepository.findById(id).flatMap(project -> Mono.just(underReview(project)));
   }
 
   @Override
@@ -66,26 +66,43 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public Flux<Author> getProjectReviewers(final String id) {
+  public Flux<Reviewer> getProjectReviewers(final String id) {
+
     return getProjectComments(id)
-        .groupBy(Comment::getAuthor)
-        .flatMap(
-            commentGroupedFlux ->
-                commentGroupedFlux.reduce(
-                    (a, b) ->
-                        a.getAuthor().getEmail().compareTo(b.getAuthor().getEmail()) > 0 ? a : b))
-        .map(Comment::getAuthor);
+            .groupBy(Comment::getReviewer)
+            .flatMap(
+                    commentGroupedFlux ->
+                            commentGroupedFlux.reduce(
+                                    (a, b) ->
+                                            a.getReviewer().getEmail().compareTo(b.getReviewer().getEmail()) > 0
+                                                    ? a
+                                                    : b))
+            .map(Comment::getReviewer);
   }
 
   @Override
   public Flux<Project> findAll() {
+
     return projectRepository.findAllByOrderByCreatedDesc();
   }
 
   @Override
   public Mono<Void> delete(final String projectId) {
+
     return codeFileRepository
-        .deleteAllByProjectId(projectId)
-        .then(projectRepository.deleteById(projectId));
+            .deleteAllByProjectId(projectId)
+            .then(projectRepository.deleteById(projectId));
   }
+
+  private Project underReview(final Project project) {
+
+    if (project.getFeedback().size() >= 2) {
+      project.setUnderReview(false);
+    } else {
+      project.setUnderReview(true);
+    }
+
+    return project;
+  }
+
 }
