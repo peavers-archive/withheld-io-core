@@ -1,10 +1,6 @@
 spring:
   application:
     name: challenges-io
-
-challenges:
-  cloc: "/Users/chris/IdeaProjects/challenge/src/main/resources/cloc-1.82.pl"
-
 ---
 server:
   port: 9091
