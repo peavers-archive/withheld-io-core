@@ -38,6 +38,7 @@ public class GitServiceImpl implements GitService {
                   .applicant(project.getApplicant())
                   .workingDirectory(tempDirectory.getAbsolutePath())
                   .feedback(project.getFeedback())
+                  .reviewers(project.getReviewers())
               .build());
 
     } catch (final GitAPIException e) {

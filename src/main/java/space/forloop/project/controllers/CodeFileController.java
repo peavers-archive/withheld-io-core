@@ -29,10 +29,10 @@ public class CodeFileController {
         return codeFileRepository.findAllByProjectIdOrderByLocationAsc(challengeId);
     }
 
-    @GetMapping("/{challengeId}/{fileId}/{reviewerId}")
-    public Mono<CodeFile> findById(@PathVariable final String challengeId, @PathVariable final String fileId, @PathVariable final String reviewerId) {
+    @GetMapping("/{challengeId}/{fileId}")
+    public Mono<CodeFile> findById(@PathVariable final String challengeId, @PathVariable final String fileId) {
 
-        return codeFileService.findById(fileId, challengeId, reviewerId);
+        return codeFileService.findById(fileId, challengeId);
     }
 
     @PatchMapping("/{challengeId}")

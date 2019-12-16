@@ -8,6 +8,6 @@ import space.forloop.project.domain.CodeFile;
  */
 public interface CodeFileService {
 
-    Mono<CodeFile> findById(String fileId, String challengeId, String reviewerId);
+    Mono<CodeFile> findById(String fileId, String challengeId);
 
 }

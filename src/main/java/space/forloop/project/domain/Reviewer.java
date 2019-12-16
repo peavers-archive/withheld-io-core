@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * @author Chris Turner (chris@forloop.space)
  */
 @Data
 @Builder
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reviewer {
@@ -20,9 +23,12 @@ public class Reviewer {
 
     private String displayName;
 
+    @Field("email")
     private String email;
 
     private String photoUrl;
+
+    private String role;
 
     @Override
     public boolean equals(final Object o) {
@@ -32,13 +38,13 @@ public class Reviewer {
 
         final Reviewer reviewer = (Reviewer) o;
 
-        return id.equals(reviewer.id);
+        return email != null ? email.equals(reviewer.email) : reviewer.email == null;
     }
 
     @Override
-  public int hashCode() {
+    public int hashCode() {
 
-        return id.hashCode();
-  }
+        return email != null ? email.hashCode() : 0;
+    }
 
 }

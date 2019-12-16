@@ -20,15 +20,11 @@ public class ProjectController {
 
   @PostMapping
   public Mono<Project> create(@RequestBody final Project project) {
-
-    log.info("create {}", project);
     return projectService.create(project);
   }
 
   @PatchMapping
   public Mono<Project> patch(@RequestBody final Project project) {
-
-    log.info("patch {}", project);
     return projectService.patch(project);
   }
 
