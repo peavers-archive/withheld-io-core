@@ -15,8 +15,6 @@ public interface CodeFileRepository extends ReactiveMongoRepository<CodeFile, St
 
     Flux<CodeFile> findAllByProjectIdOrderByLocationAsc(String projectId);
 
-    Flux<CodeFile> findAllByProjectIdAndCodeLinesSizeIsLessThanEqual(String projectId, long size);
-
     Mono<Void> deleteAllByProjectId(String projectId);
 
     @Query(

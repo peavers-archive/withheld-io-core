@@ -32,26 +32,44 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Mono<Project> patch(final Project project) {
 
-    return projectRepository.save(ProjectUtils.underReview(project));
+    return projectRepository.save(project);
   }
 
   @Override
   public Mono<Project> findById(final String challengeId) {
 
-    return projectRepository
-        .findById(challengeId)
-        .flatMap(project -> Mono.just(ProjectUtils.underReview(project)));
+      return projectRepository
+              .findById(challengeId)
+              .flatMap(
+                      project -> {
+                          if (ProjectUtils.isUnderReview(project)) {
+                              project.setUnderReview(true);
+                          } else {
+                              project.setUnderReview(false);
+                          }
+
+                          return Mono.just(project);
+                      });
   }
 
   @Override
   public Flux<Project> findAll() {
 
-    return AuthUtils.getAuthentication()
-        .flux()
-        .flatMap(
-            authentication ->
-                projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
-        .flatMap(project -> Mono.just(ProjectUtils.underReview(project)));
+      return AuthUtils.getAuthentication()
+              .flux()
+              .flatMap(
+                      authentication ->
+                              projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
+              .flatMap(
+                      project -> {
+                          if (ProjectUtils.isUnderReview(project)) {
+                              project.setUnderReview(true);
+                          } else {
+                              project.setUnderReview(false);
+                          }
+
+                          return Mono.just(project);
+                      });
   }
 
   @Override

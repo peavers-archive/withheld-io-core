@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 
@@ -14,8 +13,6 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CodeLine {
-
-  @Id private String id;
 
   private String body;
 

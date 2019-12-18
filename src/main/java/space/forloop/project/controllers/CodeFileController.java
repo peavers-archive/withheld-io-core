@@ -19,33 +19,35 @@ import space.forloop.project.service.CodeFileService;
 @RequiredArgsConstructor
 public class CodeFileController {
 
-    public final CodeFileRepository codeFileRepository;
+  public final CodeFileRepository codeFileRepository;
 
-    private final CodeFileService codeFileService;
+  private final CodeFileService codeFileService;
 
-    @GetMapping("/{challengeId}")
-    public Flux<CodeFile> findAllByProjectIdIs(@PathVariable final String challengeId) {
+  @GetMapping("/{challengeId}")
+  public Flux<CodeFile> findAllByProjectIdIs(@PathVariable final String challengeId) {
 
-        return codeFileRepository.findAllByProjectIdOrderByLocationAsc(challengeId);
-    }
+    return codeFileRepository.findAllByProjectIdOrderByLocationAsc(challengeId);
+  }
 
-    @GetMapping("/{challengeId}/{fileId}")
-    public Mono<CodeFile> findById(@PathVariable final String challengeId, @PathVariable final String fileId) {
+  @GetMapping("/{challengeId}/{fileId}")
+  public Mono<CodeFile> findById(
+          @PathVariable final String challengeId, @PathVariable final String fileId) {
 
-        return codeFileService.findById(fileId, challengeId);
-    }
+    return codeFileService.findById(fileId, challengeId);
+  }
 
-    @PatchMapping("/{challengeId}")
-    public Mono<CodeFile> update(
-            @RequestBody final CodeFile codeFile, @PathVariable final String challengeId) {
+  @PatchMapping("/{challengeId}")
+  public Mono<CodeFile> update(
+          @RequestBody final CodeFile codeFile, @PathVariable final String challengeId) {
 
-        return codeFileRepository.save(codeFile);
-    }
+    log.info("Code file {}", codeFile.toString());
 
-    @GetMapping("/{challengeId}/toc")
-    public Flux<CodeFile> tableOfContent(@PathVariable final String challengeId) {
+    return codeFileRepository.save(codeFile);
+  }
 
-        return this.codeFileRepository.tableOfContents(challengeId);
-    }
+  @GetMapping("/{challengeId}/toc")
+  public Flux<CodeFile> tableOfContent(@PathVariable final String challengeId) {
 
+    return this.codeFileRepository.tableOfContents(challengeId);
+  }
 }

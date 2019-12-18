@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.UUID;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Data
@@ -14,8 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
-
-  @Builder.Default private String id = UUID.randomUUID().toString();
 
   private Reviewer reviewer;
 
