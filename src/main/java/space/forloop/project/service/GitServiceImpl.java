@@ -1,5 +1,10 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
@@ -7,11 +12,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.Project;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.time.Instant;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -33,12 +33,12 @@ public class GitServiceImpl implements GitService {
 
       return fileService.importFiles(
           Project.builder()
-                  .source(project.getSource())
-                  .position(project.getPosition())
-                  .applicant(project.getApplicant())
-                  .workingDirectory(tempDirectory.getAbsolutePath())
-                  .feedback(project.getFeedback())
-                  .reviewers(project.getReviewers())
+              .source(project.getSource())
+              .position(project.getPosition())
+              .applicant(project.getApplicant())
+              .workingDirectory(tempDirectory.getAbsolutePath())
+              .feedback(project.getFeedback())
+              .reviewers(project.getReviewers())
               .build());
 
     } catch (final GitAPIException e) {

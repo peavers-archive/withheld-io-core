@@ -1,5 +1,14 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -10,15 +19,6 @@ import space.forloop.project.domain.CodeLine;
 import space.forloop.project.domain.Project;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.repositories.ProjectRepository;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link FileService}.
@@ -37,20 +37,20 @@ public class FileServiceImpl implements FileService {
   @Override
   public Mono<Project> importFiles(final Project project) {
 
-      final String directory = project.getWorkingDirectory();
-      final Path dir = Paths.get(directory);
+    final String directory = project.getWorkingDirectory();
+    final Path dir = Paths.get(directory);
 
-      getFilePaths(dir)
-              .forEach(
-                      path -> {
-                          try {
-                              createCodeFile(path.toPath(), project).subscribe();
-                          } catch (final IOException e) {
-                              e.printStackTrace();
-                          }
-                      });
+    getFilePaths(dir)
+        .forEach(
+            path -> {
+              try {
+                createCodeFile(path.toPath(), project).subscribe();
+              } catch (final IOException e) {
+                e.printStackTrace();
+              }
+            });
 
-      return projectRepository.save(project);
+    return projectRepository.save(project);
   }
 
   private Collection<File> getFilePaths(final Path directory) {
@@ -63,27 +63,27 @@ public class FileServiceImpl implements FileService {
     return fileCollection;
   }
 
-    private Mono<CodeFile> createCodeFile(final Path path, final Project project) throws IOException {
+  private Mono<CodeFile> createCodeFile(final Path path, final Project project) throws IOException {
 
-        final CodeFile codeFile =
-                CodeFile.builder()
-                        .projectId(project.getId())
-                        .location(Paths.get(project.getWorkingDirectory()).relativize(path).toString())
-                        .size(Files.size(path))
-                        .build();
+    final CodeFile codeFile =
+        CodeFile.builder()
+            .projectId(project.getId())
+            .location(Paths.get(project.getWorkingDirectory()).relativize(path).toString())
+            .size(Files.size(path))
+            .build();
 
-        try {
-            codeFile
-                    .getCodeLines()
-                    .addAll(
-                            Files.readAllLines(path, StandardCharsets.UTF_8).stream()
-                                    .map(line -> CodeLine.builder().body(line).build())
-                                    .collect(Collectors.toList()));
+    try {
+      codeFile
+          .getCodeLines()
+          .addAll(
+              Files.readAllLines(path, StandardCharsets.UTF_8).stream()
+                  .map(line -> CodeLine.builder().body(line).build())
+                  .collect(Collectors.toList()));
 
-            return codeFileRepository.save(codeFile);
+      return codeFileRepository.save(codeFile);
 
-        } catch (final IOException e) {
-            log.info("code line import failed {}", e.getMessage());
+    } catch (final IOException e) {
+      log.info("code line import failed {}", e.getMessage());
 
       return Mono.empty();
     }

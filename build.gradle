@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id "com.diffplug.gradle.spotless" version "3.26.1"
     id 'java'
 }
 
@@ -44,4 +45,13 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        licenseHeader '/* Licensed under Apache-2.0 */'
+        importOrder 'java', 'javax', 'org', 'com', ''
+        googleJavaFormat()
+        removeUnusedImports()
+    }
 }

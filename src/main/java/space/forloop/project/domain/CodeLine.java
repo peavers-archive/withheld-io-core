@@ -1,11 +1,11 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.domain;
 
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Data

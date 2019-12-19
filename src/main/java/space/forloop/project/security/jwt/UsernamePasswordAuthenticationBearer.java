@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.security.jwt;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

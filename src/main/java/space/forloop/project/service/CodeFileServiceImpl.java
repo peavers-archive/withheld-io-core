@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class CodeFileServiceImpl implements CodeFileService {
   public Mono<CodeFile> findById(final String fileId, final String challengeId) {
 
     return projectService
-            .findById(challengeId)
-            .flatMap(project -> codeFileRepository.findById(fileId));
+        .findById(challengeId)
+        .flatMap(project -> codeFileRepository.findById(fileId));
   }
 }

@@ -1,12 +1,12 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.security.domain;
 
+import java.util.Collection;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 @Data
 @Builder

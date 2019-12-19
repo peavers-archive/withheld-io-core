@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.security.jwt;
 
 import com.google.api.core.ApiFuture;
@@ -20,21 +21,21 @@ public class JWTCustomVerifier {
 
   public Mono<FirebaseUserDetails> check(final String unverifiedToken) {
     try {
-        final ApiFuture<FirebaseToken> task = firebaseAuth.verifyIdTokenAsync(unverifiedToken);
+      final ApiFuture<FirebaseToken> task = firebaseAuth.verifyIdTokenAsync(unverifiedToken);
 
-        final FirebaseToken token = task.get();
+      final FirebaseToken token = task.get();
 
-        final FirebaseUserDetails firebaseUserDetails =
-                FirebaseUserDetails.builder()
-                        .email(token.getEmail())
-                        .picture(token.getPicture())
-                        .userId(token.getUid())
-                        .username(token.getName())
-                        .build();
+      final FirebaseUserDetails firebaseUserDetails =
+          FirebaseUserDetails.builder()
+              .email(token.getEmail())
+              .picture(token.getPicture())
+              .userId(token.getUid())
+              .username(token.getName())
+              .build();
 
-        return Mono.justOrEmpty(firebaseUserDetails);
+      return Mono.justOrEmpty(firebaseUserDetails);
     } catch (final Exception e) {
-        throw new SessionAuthenticationException(e.getMessage());
+      throw new SessionAuthenticationException(e.getMessage());
     }
   }
 }

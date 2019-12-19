@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
 import lombok.RequiredArgsConstructor;
@@ -38,38 +39,38 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Mono<Project> findById(final String challengeId) {
 
-      return projectRepository
-              .findById(challengeId)
-              .flatMap(
-                      project -> {
-                          if (ProjectUtils.isUnderReview(project)) {
-                              project.setUnderReview(true);
-                          } else {
-                              project.setUnderReview(false);
-                          }
+    return projectRepository
+        .findById(challengeId)
+        .flatMap(
+            project -> {
+              if (ProjectUtils.isUnderReview(project)) {
+                project.setUnderReview(true);
+              } else {
+                project.setUnderReview(false);
+              }
 
-                          return Mono.just(project);
-                      });
+              return Mono.just(project);
+            });
   }
 
   @Override
   public Flux<Project> findAll() {
 
-      return AuthUtils.getAuthentication()
-              .flux()
-              .flatMap(
-                      authentication ->
-                              projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
-              .flatMap(
-                      project -> {
-                          if (ProjectUtils.isUnderReview(project)) {
-                              project.setUnderReview(true);
-                          } else {
-                              project.setUnderReview(false);
-                          }
+    return AuthUtils.getAuthentication()
+        .flux()
+        .flatMap(
+            authentication ->
+                projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
+        .flatMap(
+            project -> {
+              if (ProjectUtils.isUnderReview(project)) {
+                project.setUnderReview(true);
+              } else {
+                project.setUnderReview(false);
+              }
 
-                          return Mono.just(project);
-                      });
+              return Mono.just(project);
+            });
   }
 
   @Override

@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.controllers;
 
 import lombok.RequiredArgsConstructor;
@@ -9,9 +10,7 @@ import space.forloop.project.domain.CodeFile;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.service.CodeFileService;
 
-/**
- * @author Chris Turner (chris@forloop.space)
- */
+/** @author Chris Turner (chris@forloop.space) */
 @Slf4j
 @CrossOrigin
 @RestController
@@ -31,14 +30,14 @@ public class CodeFileController {
 
   @GetMapping("/{challengeId}/{fileId}")
   public Mono<CodeFile> findById(
-          @PathVariable final String challengeId, @PathVariable final String fileId) {
+      @PathVariable final String challengeId, @PathVariable final String fileId) {
 
     return codeFileService.findById(fileId, challengeId);
   }
 
   @PatchMapping("/{challengeId}")
   public Mono<CodeFile> update(
-          @RequestBody final CodeFile codeFile, @PathVariable final String challengeId) {
+      @RequestBody final CodeFile codeFile, @PathVariable final String challengeId) {
 
     log.info("Code file {}", codeFile.toString());
 

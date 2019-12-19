@@ -1,15 +1,14 @@
+/* Licensed under Apache-2.0 */
 package space.forloop.project.domain;
 
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Data
@@ -32,16 +31,11 @@ public class Project {
 
   private String applicant;
 
-  @Builder.Default
-  private boolean underReview = true;
+  @Builder.Default private boolean underReview = true;
 
-  @Builder.Default
-  private long created = Instant.now().toEpochMilli();
+  @Builder.Default private long created = Instant.now().toEpochMilli();
 
-  @Builder.Default
-  private HashSet<Reviewer> reviewers = new HashSet<>();
+  @Builder.Default private HashSet<Reviewer> reviewers = new HashSet<>();
 
-  @Builder.Default
-  private HashSet<Feedback> feedback = new HashSet<>();
-
+  @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
 }
