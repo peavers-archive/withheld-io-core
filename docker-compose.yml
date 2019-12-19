@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  proxy:
+    image: traefik:v1.7.16
+    container_name: traefik
+    command: --configFile=/traefik.toml
+    restart: always
+    networks:
+      - web
+    ports:
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
+
+  challenges-io-service:
+    restart: always
+    depends_on:
+      - mongo
+      - proxy
+    container_name: challenges-io-service
+    image: peavers/challenges-io:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+    ports:
+      - 9091:9091
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=challenges-io-service"
+      - "traefik.frontend.rule=Host:${HOST}"
+
+  mongo:
+    restart: always
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    networks:
+      - web
+    image: mongo
+    ports:
+      - 27017:27017
+
+networks:
+  web:
+    external: true
