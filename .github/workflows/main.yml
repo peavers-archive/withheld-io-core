@@ -1,5 +1,4 @@
-name: Build and release
-
+name: Main
 on:
   push:
     branches:
