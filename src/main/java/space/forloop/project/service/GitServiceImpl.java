@@ -24,41 +24,19 @@ public class GitServiceImpl implements GitService {
   @Override
   public Mono<Project> clone(final Project project) {
 
-    final File tempDirectory = getTempDirectory();
+    try {
+      final File workDirectory = Files.createTempDirectory(Instant.now().toString()).toFile();
+      workDirectory.deleteOnExit();
 
-    try (final Git git =
-        Git.cloneRepository().setURI(project.getSource()).setDirectory(tempDirectory).call()) {
+      Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call().close();
 
-      log.info("Git base {}", git.getRepository().getDirectory());
+      project.setWorkingDirectory(workDirectory.getAbsolutePath());
 
-      return fileService.importFiles(
-          Project.builder()
-              .source(project.getSource())
-              .position(project.getPosition())
-              .applicant(project.getApplicant())
-              .workingDirectory(tempDirectory.getAbsolutePath())
-              .feedback(project.getFeedback())
-              .reviewers(project.getReviewers())
-              .build());
+      return fileService.importFiles(project);
 
-    } catch (final GitAPIException e) {
+    } catch (final GitAPIException | IOException e) {
       log.error("issue cloning repository {}", e.getMessage());
       return Mono.error(e);
-    }
-  }
-
-  private File getTempDirectory() {
-    try {
-      final File file = Files.createTempDirectory(Instant.now().toString()).toFile();
-
-      file.deleteOnExit();
-
-      return file;
-
-    } catch (final IOException e) {
-      log.error("issue creating temp directory {}", e.getMessage());
-
-      throw new RuntimeException(e);
     }
   }
 }
