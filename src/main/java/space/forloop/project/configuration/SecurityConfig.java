@@ -58,7 +58,8 @@ public class SecurityConfig {
   }
 
   private AuthenticationWebFilter firebaseAuthenticationFilter() {
-    final AuthenticationWebFilter webFilter = new AuthenticationWebFilter(new BearerTokenReactiveAuthenticationManager());
+    final AuthenticationWebFilter webFilter =
+        new AuthenticationWebFilter(new BearerTokenReactiveAuthenticationManager());
 
     webFilter.setServerAuthenticationConverter(new FirebaseAuthenticationConverter(firebaseAuth));
     webFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/v1/**"));
