@@ -2,6 +2,7 @@ version: '3'
 
 services:
 
+  # Gives us SSL certificates
   proxy:
     image: traefik:v1.7.16
     container_name: traefik
@@ -10,30 +11,14 @@ services:
     networks:
       - web
     ports:
+      - 80:80
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
       - ./acme.json:/acme.json
 
-  challenges-io-service:
-    restart: always
-    depends_on:
-      - mongo
-      - proxy
-    container_name: challenges-io-service
-    image: peavers/challenges-io:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=production
-    ports:
-      - 9091:9091
-    networks:
-      - web
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=challenges-io-service"
-      - "traefik.frontend.rule=Host:${HOST}"
-
+  # Database
   mongo:
     restart: always
     container_name: mongodb
@@ -45,6 +30,36 @@ services:
     image: mongo
     ports:
       - 27017:27017
+
+  # Application
+  challenges-io-service:
+    restart: always
+    depends_on:
+      - mongo
+      - proxy
+    container_name: challenges-io-service
+    image: peavers/challenges-io:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+    volumes:
+      - ${FIREBASE_SERVICE_ACCOUNT}:/service-account.json
+    ports:
+      - 9091:9091
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=challenges-io-service"
+      - "traefik.frontend.rule=Host:${HOST}"
+
+  # Keep containers upto date
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "* * * * *" --cleanup
 
 networks:
   web:
