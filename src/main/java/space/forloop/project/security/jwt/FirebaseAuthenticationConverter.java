@@ -8,6 +8,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -32,24 +33,30 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
 
   private final FirebaseAuth firebaseAuth;
 
-  private Mono<FirebaseUserDetails> check(final String unverifiedToken) {
+  private Mono<FirebaseToken> verifyToken(final String unverifiedToken) {
     try {
       final ApiFuture<FirebaseToken> task = firebaseAuth.verifyIdTokenAsync(unverifiedToken);
 
-      final FirebaseToken token = task.get();
-
-      final FirebaseUserDetails firebaseUserDetails =
-          FirebaseUserDetails.builder()
-              .email(token.getEmail())
-              .picture(token.getPicture())
-              .userId(token.getUid())
-              .username(token.getName())
-              .build();
-
-      return Mono.justOrEmpty(firebaseUserDetails);
+      return Mono.justOrEmpty(task.get());
     } catch (final Exception e) {
       throw new SessionAuthenticationException(e.getMessage());
     }
+  }
+
+  private Mono<FirebaseUserDetails> buildUserDetails(final FirebaseToken firebaseToken) {
+    return Mono.justOrEmpty(
+        FirebaseUserDetails.builder()
+            .email(firebaseToken.getEmail())
+            .picture(firebaseToken.getPicture())
+            .userId(firebaseToken.getUid())
+            .username(firebaseToken.getName())
+            .build());
+  }
+
+  private Mono<Authentication> buildAuthentication(final FirebaseUserDetails userDetails) {
+    return Mono.justOrEmpty(
+        new UsernamePasswordAuthenticationToken(
+            userDetails.getEmail(), null, userDetails.getAuthorities()));
   }
 
   @Override
@@ -58,7 +65,8 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
         .flatMap(AuthorizationHeaderPayload::extract)
         .filter(matchBearerLength)
         .flatMap(isolateBearerValue)
-        .flatMap(this::check)
-        .flatMap(UsernamePasswordAuthenticationBearer::create);
+        .flatMap(this::verifyToken)
+        .flatMap(this::buildUserDetails)
+        .flatMap(this::buildAuthentication);
   }
 }

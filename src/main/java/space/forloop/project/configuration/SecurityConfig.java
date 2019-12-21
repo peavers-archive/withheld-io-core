@@ -2,7 +2,6 @@
 package space.forloop.project.configuration;
 
 import com.google.firebase.auth.FirebaseAuth;
-import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -10,9 +9,6 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import space.forloop.project.security.bearer.BearerTokenReactiveAuthenticationManager;
 import space.forloop.project.security.jwt.FirebaseAuthenticationConverter;
 
@@ -25,20 +21,6 @@ public class SecurityConfig {
   public SecurityConfig(final FirebaseAuth firebaseAuth) {
 
     this.firebaseAuth = firebaseAuth;
-  }
-
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    final CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowCredentials(true);
-    configuration.setAllowedOrigins(Collections.singletonList("*"));
-    configuration.setAllowedMethods(Collections.singletonList("*"));
-    configuration.setAllowedHeaders(Collections.singletonList("*"));
-
-    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-
-    return source;
   }
 
   @Bean
