@@ -12,11 +12,11 @@ public class ProjectUtils {
 
   public boolean isUnderReview(final Project project) {
 
-    final int reviewsComplete =
-        project.getReviewers().stream()
+    return project.getReviewers().size()
+        != project.getReviewers().stream()
             .mapToInt(
                 reviewer ->
-                    (int)
+                    Math.toIntExact(
                         project.getFeedback().stream()
                             .filter(
                                 feedback ->
@@ -24,9 +24,7 @@ public class ProjectUtils {
                                         .getReviewer()
                                         .getEmail()
                                         .equalsIgnoreCase(reviewer.getEmail()))
-                            .count())
+                            .count()))
             .sum();
-
-    return reviewsComplete != project.getFeedback().size();
   }
 }
