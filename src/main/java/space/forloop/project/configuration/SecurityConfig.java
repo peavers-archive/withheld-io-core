@@ -2,6 +2,7 @@
 package space.forloop.project.configuration;
 
 import com.google.firebase.auth.FirebaseAuth;
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -14,8 +15,6 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import space.forloop.project.security.bearer.BearerTokenReactiveAuthenticationManager;
 import space.forloop.project.security.jwt.FirebaseAuthenticationConverter;
-
-import java.util.Collections;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Configuration

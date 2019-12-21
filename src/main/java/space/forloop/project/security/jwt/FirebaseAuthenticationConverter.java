@@ -3,6 +3,8 @@ package space.forloop.project.security.jwt;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,9 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import space.forloop.project.security.domain.FirebaseUserDetails;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
