@@ -1,10 +1,11 @@
 spring:
   application:
     name: challenges-io
----
-server:
-  port: 9091
 
+firebase:
+  key: /Users/${USER}/Documents/challenges-f9f6b-5b3e066771c8.json
+
+---
 spring:
   profiles: production
   data:
@@ -13,3 +14,10 @@ spring:
       username: ${MONGO_USER}
       password: ${MONGO_PASSWORD}
       authentication-database: admin
+
+server:
+  port: 9091
+
+# Remember this is the path inside the docker container, you'll need to map it in.
+firebase:
+  key: /service-account.json
