@@ -39,18 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Mono<Project> findById(final String challengeId) {
 
-    return projectRepository
-        .findById(challengeId)
-        .flatMap(
-            project -> {
-              if (ProjectUtils.isUnderReview(project)) {
-                project.setUnderReview(true);
-              } else {
-                project.setUnderReview(false);
-              }
-
-              return Mono.just(project);
-            });
+    return projectRepository.findById(challengeId).flatMap(ProjectUtils::setReviewStatus);
   }
 
   @Override
@@ -61,16 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
         .flatMap(
             authentication ->
                 projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
-        .flatMap(
-            project -> {
-              if (ProjectUtils.isUnderReview(project)) {
-                project.setUnderReview(true);
-              } else {
-                project.setUnderReview(false);
-              }
-
-              return Mono.just(project);
-            });
+        .flatMap(project -> ProjectUtils.setReviewStatus(project).flux());
   }
 
   @Override
