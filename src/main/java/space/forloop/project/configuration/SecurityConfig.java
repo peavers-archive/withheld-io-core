@@ -14,8 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import space.forloop.project.security.bearer.BearerTokenReactiveAuthenticationManager;
-import space.forloop.project.security.bearer.ServerHttpBearerAuthenticationConverter;
-import space.forloop.project.security.jwt.JWTCustomVerifier;
+import space.forloop.project.security.jwt.FirebaseAuthenticationConverter;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Configuration
@@ -42,14 +41,6 @@ public class SecurityConfig {
     return source;
   }
 
-  /**
-   * For Spring Security webflux, a chain of filters will provide user authentication and
-   * authorization, we add custom filters to enable JWT token approach.
-   *
-   * @param http An initial object to build common filter scenarios. Customized filters are added
-   *     here.
-   * @return SecurityWebFilterChain A filter chain for web exchanges that will provide security
-   */
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(final ServerHttpSecurity http) {
 
@@ -59,32 +50,19 @@ public class SecurityConfig {
         .pathMatchers("/v1/**")
         .authenticated()
         .and()
-        .addFilterAt(bearerAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+        .addFilterAt(firebaseAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
         .csrf()
         .disable();
 
     return http.build();
   }
 
-  /**
-   * Use the already implemented logic by AuthenticationWebFilter and set a custom converter that
-   * will handle requests containing a Bearer token inside the HTTP Authorization header. Set a
-   * dummy authentication manager to this filter, it's not needed because the converter handles
-   * this.
-   *
-   * @return bearerAuthenticationFilter that will authorize requests containing a JWT
-   */
-  private AuthenticationWebFilter bearerAuthenticationFilter() {
-    final AuthenticationWebFilter bearerAuthenticationFilter;
+  private AuthenticationWebFilter firebaseAuthenticationFilter() {
+    final AuthenticationWebFilter webFilter = new AuthenticationWebFilter(new BearerTokenReactiveAuthenticationManager());
 
-    bearerAuthenticationFilter =
-        new AuthenticationWebFilter(new BearerTokenReactiveAuthenticationManager());
+    webFilter.setServerAuthenticationConverter(new FirebaseAuthenticationConverter(firebaseAuth));
+    webFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/v1/**"));
 
-    bearerAuthenticationFilter.setAuthenticationConverter(
-        new ServerHttpBearerAuthenticationConverter(new JWTCustomVerifier(firebaseAuth)));
-    bearerAuthenticationFilter.setRequiresAuthenticationMatcher(
-        ServerWebExchangeMatchers.pathMatchers("/v1/**"));
-
-    return bearerAuthenticationFilter;
+    return webFilter;
   }
 }
