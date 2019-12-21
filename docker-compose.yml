@@ -41,6 +41,8 @@ services:
     image: peavers/challenges-io:latest
     environment:
       - SPRING_PROFILES_ACTIVE=production
+      - SPRING_DATA_MONGODB_USERNAME=${MONGO_USER}
+      - SPRING_DATA_MONGODB_PASSWORD=${MONGO_PASSWORD}
     volumes:
       - ${FIREBASE_SERVICE_ACCOUNT}:/service-account.json
     ports:
