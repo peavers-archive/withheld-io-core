@@ -1,21 +1,20 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.security.jwt;
 
-import com.google.api.core.ApiFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import space.forloop.project.security.domain.FirebaseUserDetails;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -35,11 +34,9 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
 
   private Mono<FirebaseToken> verifyToken(final String unverifiedToken) {
     try {
-      final ApiFuture<FirebaseToken> task = firebaseAuth.verifyIdTokenAsync(unverifiedToken);
-
-      return Mono.justOrEmpty(task.get());
+      return Mono.justOrEmpty(firebaseAuth.verifyIdTokenAsync(unverifiedToken).get());
     } catch (final Exception e) {
-      throw new SessionAuthenticationException(e.getMessage());
+      return Mono.error(e);
     }
   }
 

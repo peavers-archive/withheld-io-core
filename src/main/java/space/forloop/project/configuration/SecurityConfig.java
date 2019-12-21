@@ -61,7 +61,8 @@ public class SecurityConfig {
         .build();
   }
 
-  private AuthenticationWebFilter firebaseAuthenticationFilter() {
+  @Bean
+  public AuthenticationWebFilter firebaseAuthenticationFilter() {
 
     final BearerTokenReactiveAuthenticationManager authenticationManager =
         new BearerTokenReactiveAuthenticationManager();
