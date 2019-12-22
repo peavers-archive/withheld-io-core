@@ -31,6 +31,8 @@ public class Project {
 
   private String applicant;
 
+  private String downloadUrl;
+
   @Builder.Default private boolean underReview = true;
 
   @Builder.Default private long created = Instant.now().toEpochMilli();
