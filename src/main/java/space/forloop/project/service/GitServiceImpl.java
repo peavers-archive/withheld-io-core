@@ -1,9 +1,6 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -13,6 +10,14 @@ import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.Project;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.time.Instant;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -33,11 +38,12 @@ public class GitServiceImpl implements GitService {
       final File workDirectory = Files.createTempDirectory(Instant.now().toString()).toFile();
       workDirectory.deleteOnExit();
 
-      Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call().close();
+      final Git git =
+          Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call();
 
-      final String downloadUrl = uploadProject(workDirectory);
+      git.getRepository().close();
 
-      project.setDownloadUrl(downloadUrl);
+      //      project.setDownloadUrl(uploadProject(workDirectory));
       project.setWorkingDirectory(workDirectory.getAbsolutePath());
 
       return fileService.importFiles(project);
@@ -61,7 +67,7 @@ public class GitServiceImpl implements GitService {
   private File zipDirectory(File workDirectory) {
     final String zipFileName =
         String.format(
-            "%s/challenge-%d.zip", workDirectory.getAbsoluteFile(), Instant.now().toEpochMilli());
+            "%s/challenge-%d.zip", workDirectory.getAbsolutePath(), Instant.now().toEpochMilli());
 
     final File zipFile = new File(zipFileName);
 
