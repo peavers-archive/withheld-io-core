@@ -20,6 +20,8 @@ import space.forloop.project.domain.Project;
 @RequiredArgsConstructor
 public class GitServiceImpl implements GitService {
 
+  public static final String BUCKET_NAME = "challenges-f9f6b.appspot.com";
+
   private final FileService fileService;
 
   private final CloudStorageService cloudStorageService;
@@ -31,25 +33,9 @@ public class GitServiceImpl implements GitService {
       final File workDirectory = Files.createTempDirectory(Instant.now().toString()).toFile();
       workDirectory.deleteOnExit();
 
-      // Clone project from git
       Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call().close();
 
-      // Remove the git directory so we don't zip it
-      FileUtils.deleteDirectory(new File(workDirectory.getAbsoluteFile() + "/.git"));
-
-      // Create a zip of the project
-      final File zipFile =
-          new File(
-              String.format(
-                  "%s/challenge-%d.zip",
-                  workDirectory.getAbsoluteFile(), Instant.now().toEpochMilli()));
-      ZipUtil.pack(workDirectory, zipFile);
-
-      final InputStream targetStream = new DataInputStream(new FileInputStream(zipFile));
-
-      final String downloadUrl =
-          cloudStorageService.uploadFile(
-              targetStream, zipFile.getName(), "challenges-f9f6b.appspot.com");
+      final String downloadUrl = uploadProject(workDirectory);
 
       project.setDownloadUrl(downloadUrl);
       project.setWorkingDirectory(workDirectory.getAbsolutePath());
@@ -60,5 +46,27 @@ public class GitServiceImpl implements GitService {
       log.error("issue cloning repository {}", e.getMessage());
       return Mono.error(e);
     }
+  }
+
+  private String uploadProject(File workDirectory) throws IOException {
+    FileUtils.deleteDirectory(new File(String.format("%s/.git", workDirectory.getAbsoluteFile())));
+
+    final File zipFile = zipDirectory(workDirectory);
+
+    final InputStream targetStream = new DataInputStream(new FileInputStream(zipFile));
+
+    return cloudStorageService.uploadFile(targetStream, zipFile.getName(), BUCKET_NAME);
+  }
+
+  private File zipDirectory(File workDirectory) {
+    final String zipFileName =
+        String.format(
+            "%s/challenge-%d.zip", workDirectory.getAbsoluteFile(), Instant.now().toEpochMilli());
+
+    final File zipFile = new File(zipFileName);
+
+    ZipUtil.pack(workDirectory, zipFile);
+
+    return zipFile;
   }
 }

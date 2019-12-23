@@ -1,14 +1,9 @@
 spring:
   application:
     name: challenges-io
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri:
 
 firebase:
-  key: /Users/${USER}/Documents/challenges-f9f6b-5b3e066771c8.json
+  key: /Users/${USER}/Documents/challenges.json
 
 ---
 spring:

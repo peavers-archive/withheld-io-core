@@ -1,18 +1,19 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
+import org.zeroturnaround.zip.ZipUtil;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.CodeFile;
 import space.forloop.project.domain.CodeLine;
@@ -83,9 +84,7 @@ public class FileServiceImpl implements FileService {
       return codeFileRepository.save(codeFile);
 
     } catch (final IOException e) {
-      log.info("code line import failed {}", e.getMessage());
-
-      return Mono.empty();
+      return Mono.error(e);
     }
   }
 }

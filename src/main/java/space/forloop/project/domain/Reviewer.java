@@ -21,7 +21,6 @@ public class Reviewer {
 
   private String displayName;
 
-  @Field("email")
   private String email;
 
   private String photoUrl;
