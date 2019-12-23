@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -30,6 +31,11 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
       authValue -> Mono.justOrEmpty(authValue.substring(BEARER.length()));
 
   private final FirebaseAuth firebaseAuth;
+
+  private Mono<String> extractHeader(final ServerWebExchange serverWebExchange) {
+    return Mono.justOrEmpty(
+        serverWebExchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
+  }
 
   private Mono<FirebaseToken> verifyToken(final String unverifiedToken) {
     try {
@@ -58,7 +64,7 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
   @Override
   public Mono<Authentication> convert(final ServerWebExchange exchange) {
     return Mono.justOrEmpty(exchange)
-        .flatMap(AuthorizationHeaderPayload::extract)
+        .flatMap(this::extractHeader)
         .filter(matchBearerLength)
         .flatMap(isolateBearerValue)
         .flatMap(this::verifyToken)
