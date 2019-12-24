@@ -6,8 +6,6 @@ import com.google.cloud.storage.Acl.Role;
 import com.google.cloud.storage.Acl.User;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,16 +22,16 @@ public class CloudStorageServiceImpl implements CloudStorageService {
   private final Storage storage;
 
   @Override
-  public String uploadFile(final InputStream inputStream, String name, final String bucketName)
-      throws IOException {
+  public String uploadFile(
+      final InputStream inputStream, final String name, final String bucketName) {
 
-    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    final byte[] readBuf = new byte[4096];
-
-    while (inputStream.available() > 0) {
-      final int bytesRead = inputStream.read(readBuf);
-      byteArrayOutputStream.write(readBuf, 0, bytesRead);
-    }
+    //    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    //    final byte[] readBuf = new byte[4096];
+    //
+    //    while (inputStream.available() > 0) {
+    //      final int bytesRead = inputStream.read(readBuf);
+    //      byteArrayOutputStream.write(readBuf, 0, bytesRead);
+    //    }
 
     final BlobInfo blobInfo =
         storage.create(
@@ -42,7 +40,7 @@ public class CloudStorageServiceImpl implements CloudStorageService {
                     new ArrayList<>(
                         Collections.singletonList(Acl.of(User.ofAllUsers(), Role.READER))))
                 .build(),
-            byteArrayOutputStream.toByteArray());
+            inputStream);
 
     return blobInfo.getMediaLink();
   }

@@ -1,6 +1,9 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -10,14 +13,6 @@ import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.Project;
-
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.time.Instant;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -43,7 +38,10 @@ public class GitServiceImpl implements GitService {
 
       git.getRepository().close();
 
-      //      project.setDownloadUrl(uploadProject(workDirectory));
+      final String uploadProject = uploadProject(workDirectory);
+      log.info("uploaded to GCS {}", uploadProject);
+
+      project.setDownloadUrl(uploadProject);
       project.setWorkingDirectory(workDirectory.getAbsolutePath());
 
       return fileService.importFiles(project);
@@ -54,8 +52,9 @@ public class GitServiceImpl implements GitService {
     }
   }
 
-  private String uploadProject(File workDirectory) throws IOException {
-    FileUtils.deleteDirectory(new File(String.format("%s/.git", workDirectory.getAbsoluteFile())));
+  private String uploadProject(final File workDirectory) throws IOException {
+    FileUtils.deleteDirectory(new File(String.format("%s/.git", workDirectory.getAbsolutePath())));
+    log.info("removed .git directory");
 
     final File zipFile = zipDirectory(workDirectory);
 
@@ -64,14 +63,14 @@ public class GitServiceImpl implements GitService {
     return cloudStorageService.uploadFile(targetStream, zipFile.getName(), BUCKET_NAME);
   }
 
-  private File zipDirectory(File workDirectory) {
-    final String zipFileName =
-        String.format(
-            "%s/challenge-%d.zip", workDirectory.getAbsolutePath(), Instant.now().toEpochMilli());
-
-    final File zipFile = new File(zipFileName);
+  private File zipDirectory(final File workDirectory) throws IOException {
+    final File zipFile =
+        Files.createTempFile("challenge-" + Instant.now().toEpochMilli(), ".zip").toFile();
+    zipFile.deleteOnExit();
 
     ZipUtil.pack(workDirectory, zipFile);
+
+    log.info("zipped directory {}", zipFile.getAbsolutePath());
 
     return zipFile;
   }

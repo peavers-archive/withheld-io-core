@@ -1,7 +1,8 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,7 +83,11 @@ public class FileServiceImpl implements FileService {
       return codeFileRepository.save(codeFile);
 
     } catch (final IOException e) {
-      return Mono.error(e);
+      log.info("swallowing this exception {}", e.getMessage());
+
+      // If this happens is means we tried to read a dead/empty/broken file. We actually don't care
+      // about those so just return an empty Mono an don't stop the processing.
+      return Mono.empty();
     }
   }
 }
