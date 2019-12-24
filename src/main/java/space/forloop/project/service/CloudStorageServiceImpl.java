@@ -6,11 +6,14 @@ import com.google.cloud.storage.Acl.Role;
 import com.google.cloud.storage.Acl.User;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 /** @author Chris Turner (chris@forloop.space) */
@@ -23,25 +26,17 @@ public class CloudStorageServiceImpl implements CloudStorageService {
 
   @Override
   public String uploadFile(
-      final InputStream inputStream, final String name, final String bucketName) {
+      final InputStream inputStream, final String name, final String bucketName)
+      throws IOException {
 
-    //    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    //    final byte[] readBuf = new byte[4096];
-    //
-    //    while (inputStream.available() > 0) {
-    //      final int bytesRead = inputStream.read(readBuf);
-    //      byteArrayOutputStream.write(readBuf, 0, bytesRead);
-    //    }
+    final ByteArrayInputStream initialStream = new ByteArrayInputStream(new byte[] {0, 1, 2});
 
     final BlobInfo blobInfo =
-        storage.create(
-            BlobInfo.newBuilder(bucketName, name)
-                .setAcl(
-                    new ArrayList<>(
-                        Collections.singletonList(Acl.of(User.ofAllUsers(), Role.READER))))
-                .build(),
-            inputStream);
+        BlobInfo.newBuilder(bucketName, name)
+            .setAcl(
+                new ArrayList<>(Collections.singletonList(Acl.of(User.ofAllUsers(), Role.READER))))
+            .build();
 
-    return blobInfo.getMediaLink();
+    return storage.create(blobInfo, IOUtils.toByteArray(initialStream)).getMediaLink();
   }
 }

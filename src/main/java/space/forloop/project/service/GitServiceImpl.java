@@ -33,28 +33,20 @@ public class GitServiceImpl implements GitService {
       final File workDirectory = Files.createTempDirectory(Instant.now().toString()).toFile();
       workDirectory.deleteOnExit();
 
-      final Git git =
-          Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call();
+      Git.cloneRepository().setURI(project.getSource()).setDirectory(workDirectory).call().clean();
 
-      git.getRepository().close();
-
-      final String uploadProject = uploadProject(workDirectory);
-      log.info("uploaded to GCS {}", uploadProject);
-
-      project.setDownloadUrl(uploadProject);
+      project.setDownloadUrl(uploadProject(workDirectory));
       project.setWorkingDirectory(workDirectory.getAbsolutePath());
 
       return fileService.importFiles(project);
 
     } catch (final GitAPIException | IOException e) {
-      log.error("issue cloning repository {}", e.getMessage());
       return Mono.error(e);
     }
   }
 
   private String uploadProject(final File workDirectory) throws IOException {
     FileUtils.deleteDirectory(new File(String.format("%s/.git", workDirectory.getAbsolutePath())));
-    log.info("removed .git directory");
 
     final File zipFile = zipDirectory(workDirectory);
 
@@ -69,8 +61,6 @@ public class GitServiceImpl implements GitService {
     zipFile.deleteOnExit();
 
     ZipUtil.pack(workDirectory, zipFile);
-
-    log.info("zipped directory {}", zipFile.getAbsolutePath());
 
     return zipFile;
   }
