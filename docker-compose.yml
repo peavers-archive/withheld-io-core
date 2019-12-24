@@ -17,6 +17,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
       - ./acme.json:/acme.json
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
 
   # Database
   mongo:
@@ -30,6 +34,10 @@ services:
     image: mongo
     ports:
       - 27017:27017
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
 
   # Application
   challenges-io-service:
@@ -53,6 +61,10 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=challenges-io-service"
       - "traefik.frontend.rule=Host:${HOST}"
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
 
   # Keep containers upto date
   watchtower:
@@ -62,7 +74,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --schedule "* * * * *" --cleanup
-
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+        
 networks:
   web:
     external: true

@@ -59,11 +59,8 @@ public class ProjectServiceImpl implements ProjectService {
     return AuthUtils.getAuthentication()
         .flux()
         .flatMap(
-            authentication -> {
-              log.info("auth {}", authentication.getPrincipal().toString());
-              return projectRepository.findAllReviewersByUid(
-                  authentication.getPrincipal().toString());
-            })
+            authentication ->
+                projectRepository.findAllReviewersByUid(authentication.getPrincipal().toString()))
         .flatMap(project -> ProjectUtils.setReviewStatus(project).flux());
   }
 

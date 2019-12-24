@@ -3,7 +3,6 @@ package space.forloop.project.domain;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -43,5 +42,5 @@ public class Project {
 
   @Builder.Default private List<String> reviewGroups = new ArrayList<>();
 
-  @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
+  @Builder.Default private List<Feedback> feedback = new ArrayList<>();
 }
