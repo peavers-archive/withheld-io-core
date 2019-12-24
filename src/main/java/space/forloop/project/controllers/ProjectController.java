@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.controllers;
 
+import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +29,8 @@ public class ProjectController {
   public final ProjectService projectService;
 
   @PostMapping
-  public Mono<Project> create(@RequestBody final Project project) {
+  public Mono<Project> create(@RequestBody final Project project)
+      throws ExecutionException, InterruptedException {
     return projectService.create(project);
   }
 

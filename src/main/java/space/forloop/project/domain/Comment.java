@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Comment {
 
-  private Reviewer reviewer;
+  private FirebaseUser firebaseUser;
 
   private String body;
 

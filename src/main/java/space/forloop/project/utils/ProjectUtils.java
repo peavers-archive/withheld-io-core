@@ -33,7 +33,7 @@ public class ProjectUtils {
                             .filter(
                                 feedback ->
                                     feedback
-                                        .getReviewer()
+                                        .getFirebaseUser()
                                         .getEmail()
                                         .equalsIgnoreCase(reviewer.getEmail()))
                             .count()))

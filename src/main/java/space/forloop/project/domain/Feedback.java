@@ -19,5 +19,5 @@ public class Feedback {
 
   private String comments;
 
-  private Reviewer reviewer;
+  private FirebaseUser firebaseUser;
 }

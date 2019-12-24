@@ -11,6 +11,6 @@ import space.forloop.project.domain.Project;
 @Repository
 public interface ProjectRepository extends ReactiveMongoRepository<Project, String> {
 
-  @Query("{'reviewers.email': ?0}")
-  Flux<Project> findAllByReviewerEmail(String email);
+  @Query("{'reviewers.uid': ?0}")
+  Flux<Project> findAllReviewersByUid(String uid);
 }

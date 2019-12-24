@@ -14,7 +14,7 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import space.forloop.project.security.domain.FirebaseUserDetails;
+import space.forloop.project.domain.FirebaseUser;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -24,10 +24,10 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
 
   private static final String BEARER = "Bearer ";
 
-  private static final Predicate<String> matchBearerLength =
+  private final Predicate<String> matchBearerLength =
       authValue -> authValue.length() > BEARER.length();
 
-  private static final Function<String, Mono<String>> isolateBearerValue =
+  private final Function<String, Mono<String>> isolateBearerValue =
       authValue -> Mono.justOrEmpty(authValue.substring(BEARER.length()));
 
   private final FirebaseAuth firebaseAuth;
@@ -45,20 +45,19 @@ public class FirebaseAuthenticationConverter implements ServerAuthenticationConv
     }
   }
 
-  private Mono<FirebaseUserDetails> buildUserDetails(final FirebaseToken firebaseToken) {
+  private Mono<FirebaseUser> buildUserDetails(final FirebaseToken firebaseToken) {
     return Mono.justOrEmpty(
-        FirebaseUserDetails.builder()
+        FirebaseUser.builder()
             .email(firebaseToken.getEmail())
-            .picture(firebaseToken.getPicture())
-            .userId(firebaseToken.getUid())
-            .username(firebaseToken.getName())
+            .photoURL(firebaseToken.getPicture())
+            .uid(firebaseToken.getUid())
+            .displayName(firebaseToken.getName())
             .build());
   }
 
-  private Mono<Authentication> buildAuthentication(final FirebaseUserDetails userDetails) {
+  private Mono<Authentication> buildAuthentication(final FirebaseUser userDetails) {
     return Mono.justOrEmpty(
-        new UsernamePasswordAuthenticationToken(
-            userDetails.getEmail(), null, userDetails.getAuthorities()));
+        new UsernamePasswordAuthenticationToken(userDetails.getUid(), null, null));
   }
 
   @Override

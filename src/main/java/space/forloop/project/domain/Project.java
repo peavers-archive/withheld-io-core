@@ -2,7 +2,9 @@
 package space.forloop.project.domain;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +39,7 @@ public class Project {
 
   @Builder.Default private long created = Instant.now().toEpochMilli();
 
-  @Builder.Default private HashSet<Reviewer> reviewers = new HashSet<>();
+  @Builder.Default private List<FirebaseUser> reviewers = new ArrayList<>();
 
   @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
 }

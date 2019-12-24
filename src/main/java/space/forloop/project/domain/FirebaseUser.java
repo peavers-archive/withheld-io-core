@@ -1,11 +1,12 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /** @author Chris Turner (chris@forloop.space) */
@@ -14,17 +15,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reviewer {
+public class FirebaseUser {
 
-  @Id private String id;
+  private String uid;
 
   private String displayName;
 
   private String email;
 
-  private String photoUrl;
+  private String photoURL;
 
   private String role;
+
+  @Builder.Default private List<String> reviewGroup = new ArrayList<>();
 
   @Override
   public boolean equals(final Object o) {
@@ -32,14 +35,14 @@ public class Reviewer {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    final Reviewer reviewer = (Reviewer) o;
+    final FirebaseUser that = (FirebaseUser) o;
 
-    return email != null ? email.equals(reviewer.email) : reviewer.email == null;
+    return uid != null ? uid.equals(that.uid) : that.uid == null;
   }
 
   @Override
   public int hashCode() {
 
-    return email != null ? email.hashCode() : 0;
+    return uid != null ? uid.hashCode() : 0;
   }
 }

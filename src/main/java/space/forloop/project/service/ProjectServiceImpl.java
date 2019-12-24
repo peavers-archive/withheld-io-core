@@ -1,6 +1,9 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,18 @@ public class ProjectServiceImpl implements ProjectService {
 
   private final CodeFileRepository codeFileRepository;
 
+  private final FirestoreService firestoreService;
+
   private final GitService gitService;
 
   @Override
-  public Mono<Project> create(final Project project) {
+  public Mono<Project> create(final Project project)
+      throws ExecutionException, InterruptedException {
+
+    final List<String> groups = new ArrayList<>();
+    groups.add("Backend");
+
+    project.setReviewers(firestoreService.findAllWithReviewGroups(groups));
 
     return gitService.clone(project);
   }
@@ -48,8 +59,11 @@ public class ProjectServiceImpl implements ProjectService {
     return AuthUtils.getAuthentication()
         .flux()
         .flatMap(
-            authentication ->
-                projectRepository.findAllByReviewerEmail(authentication.getPrincipal().toString()))
+            authentication -> {
+              log.info("auth {}", authentication.getPrincipal().toString());
+              return projectRepository.findAllReviewersByUid(
+                  authentication.getPrincipal().toString());
+            })
         .flatMap(project -> ProjectUtils.setReviewStatus(project).flux());
   }
 

@@ -3,6 +3,8 @@ package space.forloop.project.configuration;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.FirebaseApp;
@@ -23,23 +25,28 @@ public class GoogleConfig {
   @Bean
   public FirebaseAuth firebaseAuth() throws IOException {
 
-    final FileInputStream serviceAccount = new FileInputStream(firebaseKey);
-
     FirebaseApp.initializeApp(
         new FirebaseOptions.Builder()
-            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .setCredentials(GoogleCredentials.fromStream(new FileInputStream(firebaseKey)))
             .build());
 
     return FirebaseAuth.getInstance();
   }
 
   @Bean
-  public Storage storage() throws IOException {
+  public Firestore firestore() throws IOException {
 
-    final FileInputStream serviceAccount = new FileInputStream(firebaseKey);
+    return FirestoreOptions.newBuilder()
+        .setCredentials(GoogleCredentials.fromStream(new FileInputStream(firebaseKey)))
+        .build()
+        .getService();
+  }
+
+  @Bean
+  public Storage cloudStorage() throws IOException {
 
     return StorageOptions.newBuilder()
-        .setCredentials(ServiceAccountCredentials.fromStream(serviceAccount))
+        .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(firebaseKey)))
         .build()
         .getService();
   }
