@@ -41,5 +41,7 @@ public class Project {
 
   @Builder.Default private List<FirebaseUser> reviewers = new ArrayList<>();
 
+  @Builder.Default private List<String> reviewGroups = new ArrayList<>();
+
   @Builder.Default private HashSet<Feedback> feedback = new HashSet<>();
 }

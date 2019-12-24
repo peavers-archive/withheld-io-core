@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import space.forloop.project.domain.FirebaseUser;
 import space.forloop.project.domain.Project;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.repositories.ProjectRepository;
@@ -33,10 +33,10 @@ public class ProjectServiceImpl implements ProjectService {
   public Mono<Project> create(final Project project)
       throws ExecutionException, InterruptedException {
 
-    final List<String> groups = new ArrayList<>();
-    groups.add("Backend");
+    final List<FirebaseUser> reviewGroups =
+        firestoreService.findAllWithReviewGroups(project.getReviewGroups());
 
-    project.setReviewers(firestoreService.findAllWithReviewGroups(groups));
+    project.setReviewers(reviewGroups);
 
     return gitService.clone(project);
   }
