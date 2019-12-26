@@ -7,5 +7,5 @@ import space.forloop.project.domain.CodeFile;
 /** @author Chris Turner (chris@forloop.space) */
 public interface CodeFileService {
 
-  Mono<CodeFile> findById(String fileId, String challengeId);
+  Mono<CodeFile> findById(String challengeId, String fileId);
 }

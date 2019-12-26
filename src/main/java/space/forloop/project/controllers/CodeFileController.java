@@ -1,18 +1,20 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.controllers;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import space.forloop.project.domain.CodeFile;
-import space.forloop.project.domain.Comment;
 import space.forloop.project.repositories.CodeFileRepository;
 import space.forloop.project.service.CodeFileService;
-import space.forloop.project.utils.AuthUtils;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j
@@ -36,34 +38,7 @@ public class CodeFileController {
   public Mono<CodeFile> findById(
       @PathVariable final String challengeId, @PathVariable final String fileId) {
 
-    return AuthUtils.getAuthentication()
-        .flatMap(
-            authentication ->
-                codeFileService
-                    .findById(fileId, challengeId)
-                    .flatMap(
-                        codeFile -> {
-                          codeFile
-                              .getCodeLines()
-                              .forEach(
-                                  codeLine -> {
-                                    final ArrayList<Comment> comments =
-                                        codeLine.getComments().stream()
-                                            .filter(
-                                                comment ->
-                                                    comment
-                                                        .getFirebaseUser()
-                                                        .getUid()
-                                                        .equalsIgnoreCase(
-                                                            authentication
-                                                                .getPrincipal()
-                                                                .toString()))
-                                            .collect(Collectors.toCollection(ArrayList::new));
-                                    codeLine.setComments(comments);
-                                  });
-
-                          return Mono.justOrEmpty(codeFile);
-                        }));
+    return codeFileService.findById(challengeId, fileId);
   }
 
   @PatchMapping("/{challengeId}")
