@@ -23,7 +23,5 @@ public class CodeFile {
 
   private long size;
 
-  private long codeLinesSize;
-
   @Builder.Default private ArrayList<CodeLine> codeLines = new ArrayList<>();
 }

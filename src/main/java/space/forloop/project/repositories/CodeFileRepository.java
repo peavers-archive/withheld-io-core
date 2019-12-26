@@ -18,4 +18,7 @@ public interface CodeFileRepository extends ReactiveMongoRepository<CodeFile, St
 
   @Query(value = "{ projectId : ?0}", fields = "{ location  : 1, size : 1 }")
   Flux<CodeFile> tableOfContents(String projectId);
+
+  @Query("{'codeLines._id': ?0}")
+  Mono<CodeFile> findByCodeLineId(String id);
 }
