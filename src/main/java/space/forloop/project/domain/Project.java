@@ -20,19 +20,19 @@ public class Project {
 
   @Id @Builder.Default private String id = UUID.randomUUID().toString();
 
-  private String source;
-
-  private String gitBaseDirectory;
-
-  private String workingDirectory;
-
-  private String position;
-
-  private String level;
-
   private String applicant;
 
   private String downloadUrl;
+
+  private String gitBaseDirectory;
+
+  private String level;
+
+  private String position;
+
+  private String source;
+
+  private String workingDirectory;
 
   @Builder.Default private boolean underReview = true;
 
