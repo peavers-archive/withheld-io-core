@@ -18,5 +18,7 @@ public class Comment {
 
   private String body;
 
+  private String codeLineId;
+
   @Builder.Default private long created = Instant.now().toEpochMilli();
 }
