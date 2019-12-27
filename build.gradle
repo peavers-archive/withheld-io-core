@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id "com.diffplug.gradle.spotless" version "3.26.1"
+    id 'com.diffplug.gradle.spotless' version '3.26.1'
     id 'java'
 }
 
@@ -35,7 +35,6 @@ dependencies {
     implementation 'org.eclipse.jgit:org.eclipse.jgit:5.6.0.201912101111-r'
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-collections4:4.4'
-
     implementation 'org.zeroturnaround:zt-zip:1.13'
 
     compileOnly 'org.projectlombok:lombok'
@@ -55,7 +54,7 @@ spotless {
     java {
         licenseHeader '/* Licensed under Apache-2.0 */'
         importOrder 'java', 'javax', 'org', 'com', ''
-        googleJavaFormat()
         removeUnusedImports()
+        googleJavaFormat()
     }
 }
