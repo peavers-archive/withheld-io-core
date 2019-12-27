@@ -48,9 +48,9 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public Mono<Project> findById(final String challengeId) {
+  public Mono<Project> findById(final String projectId) {
 
-    return projectRepository.findById(challengeId).flatMap(ProjectUtils::setReviewStatus);
+    return projectRepository.findById(projectId).flatMap(ProjectUtils::setReviewStatus);
   }
 
   @Override

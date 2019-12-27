@@ -56,7 +56,7 @@ public class GitServiceImpl implements GitService {
 
   private File zipDirectory(final File workDirectory) throws IOException {
     final File zipFile =
-        Files.createTempFile("challenge-" + Instant.now().toEpochMilli(), ".zip").toFile();
+        Files.createTempFile("project-" + Instant.now().toEpochMilli(), ".zip").toFile();
     zipFile.deleteOnExit();
 
     ZipUtil.pack(workDirectory, zipFile);

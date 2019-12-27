@@ -26,18 +26,18 @@ public class CodeFileController {
 
   private final ProjectService projectService;
 
-  @GetMapping("/{challengeId}")
-  public Flux<CodeFile> findAllByProjectIdIs(@PathVariable final String challengeId) {
+  @GetMapping("/{projectId}")
+  public Flux<CodeFile> findAllByProjectIdIs(@PathVariable final String projectId) {
 
-    return codeFileRepository.findAllByProjectIdOrderByLocationAsc(challengeId);
+    return codeFileRepository.findAllByProjectIdOrderByLocationAsc(projectId);
   }
 
-  @GetMapping("/{challengeId}/{codeFileId}")
+  @GetMapping("/{projectId}/{codeFileId}")
   public Mono<CodeFile> findById(
-      @PathVariable final String challengeId, @PathVariable final String codeFileId) {
+      @PathVariable final String projectId, @PathVariable final String codeFileId) {
 
     return projectService
-        .findById(challengeId)
+        .findById(projectId)
         .flatMap(
             project ->
                 ProjectUtils.isUnderReview(project)
@@ -45,16 +45,16 @@ public class CodeFileController {
                     : codeFileService.findById(codeFileId));
   }
 
-  @PatchMapping("/{challengeId}")
+  @PatchMapping("/{projectId}")
   public Mono<CodeFile> update(
-      @RequestBody final CodeFile codeFile, @PathVariable final String challengeId) {
+      @RequestBody final CodeFile codeFile, @PathVariable final String projectId) {
 
     return codeFileRepository.save(codeFile);
   }
 
-  @GetMapping("/{challengeId}/toc")
-  public Flux<CodeFile> tableOfContent(@PathVariable final String challengeId) {
+  @GetMapping("/{projectId}/toc")
+  public Flux<CodeFile> tableOfContent(@PathVariable final String projectId) {
 
-    return this.codeFileRepository.tableOfContents(challengeId);
+    return this.codeFileRepository.tableOfContents(projectId);
   }
 }

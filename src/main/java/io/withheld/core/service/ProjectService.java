@@ -13,7 +13,7 @@ public interface ProjectService {
 
   Mono<Project> patch(Project project);
 
-  Mono<Project> findById(String challengeId);
+  Mono<Project> findById(String projectId);
 
   Flux<Project> findAll();
 

@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("/v1/challenges")
+@RequestMapping("/v1/projects")
 @RequiredArgsConstructor
 public class ProjectController {
 
@@ -39,9 +39,9 @@ public class ProjectController {
     return projectService.patch(project);
   }
 
-  @GetMapping("/{challengeId}")
-  public Mono<Project> findById(@PathVariable final String challengeId) {
-    return projectService.findById(challengeId);
+  @GetMapping("/{projectId}")
+  public Mono<Project> findById(@PathVariable final String projectId) {
+    return projectService.findById(projectId);
   }
 
   @GetMapping
@@ -49,8 +49,8 @@ public class ProjectController {
     return projectService.findAll();
   }
 
-  @DeleteMapping("/{challengeId}")
-  public Mono<Void> delete(@PathVariable final String challengeId) {
-    return projectService.delete(challengeId);
+  @DeleteMapping("/{projectId}")
+  public Mono<Void> delete(@PathVariable final String projectId) {
+    return projectService.delete(projectId);
   }
 }
