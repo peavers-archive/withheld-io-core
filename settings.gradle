@@ -11,4 +11,4 @@ pluginManagement {
 		}
 	}
 }
-rootProject.name = 'challenges-io-service'
+rootProject.name = 'withheld-io-core'

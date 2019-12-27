@@ -40,13 +40,13 @@ services:
         max-file: "5"
 
   # Application
-  challenges-io-service:
+  withheld-io-core:
     restart: always
     depends_on:
       - mongo
       - proxy
-    container_name: challenges-io-service
-    image: peavers/challenges-io:latest
+    container_name: withheld-io-core
+    image: peavers/withheld-io-core:latest
     environment:
       - SPRING_PROFILES_ACTIVE=production
       - SPRING_DATA_MONGODB_USERNAME=${MONGO_USER}
@@ -59,7 +59,7 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      - "traefik.backend=challenges-io-service"
+      - "traefik.backend=withheld-io-core"
       - "traefik.frontend.rule=Host:${HOST}"
     logging:
       options:

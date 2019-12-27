@@ -45,6 +45,6 @@ jobs:
       - name: Build and push docker container
         uses: HurricanKai/Publish-Docker-Github-Action@master
         with:
-          name: peavers/challenges-io
+          name: peavers/withheld-io-core
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}

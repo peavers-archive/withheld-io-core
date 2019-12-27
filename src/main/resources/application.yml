@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenges-io
+    name: withheld-io-core
 
 firebase:
   key: /Users/${USER}/Documents/challenges.json
