@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Feedback {
 
-  private String level;
-
-  private String nextStage;
+  private FirebaseUser firebaseUser;
 
   private String comments;
 
-  private FirebaseUser firebaseUser;
+  private String level;
+
+  private String nextStage;
 }

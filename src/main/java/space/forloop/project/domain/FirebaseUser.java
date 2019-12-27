@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class FirebaseUser {
 
-  private String uid;
+  @Builder.Default private List<String> reviewGroup = new ArrayList<>();
 
   private String displayName;
 
@@ -27,7 +27,7 @@ public class FirebaseUser {
 
   private String role;
 
-  @Builder.Default private List<String> reviewGroup = new ArrayList<>();
+  private String uid;
 
   @Override
   public boolean equals(final Object o) {

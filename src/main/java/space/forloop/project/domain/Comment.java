@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Comment {
 
+  @Builder.Default private long created = Instant.now().toEpochMilli();
+
   private FirebaseUser firebaseUser;
 
   private String body;
 
   private String codeLineId;
-
-  @Builder.Default private long created = Instant.now().toEpochMilli();
 }

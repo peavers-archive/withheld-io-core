@@ -1,7 +1,8 @@
 /* Licensed under Apache-2.0 */
 package space.forloop.project.service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,7 @@ public class GitServiceImpl implements GitService {
 
     final File zipFile = zipDirectory(workDirectory);
 
-    final InputStream targetStream = new DataInputStream(new FileInputStream(zipFile));
-
-    return cloudStorageService.uploadFile(targetStream, zipFile.getName(), BUCKET_NAME);
+    return cloudStorageService.uploadFile(zipFile, zipFile.getName(), BUCKET_NAME);
   }
 
   private File zipDirectory(final File workDirectory) throws IOException {
