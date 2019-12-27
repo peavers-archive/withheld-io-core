@@ -5,13 +5,13 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
+import io.withheld.core.domain.FirebaseUser;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import io.withheld.core.domain.FirebaseUser;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j

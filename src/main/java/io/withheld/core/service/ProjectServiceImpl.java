@@ -1,6 +1,12 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.service;
 
+import io.withheld.core.domain.FirebaseUser;
+import io.withheld.core.domain.Project;
+import io.withheld.core.repositories.CodeFileRepository;
+import io.withheld.core.repositories.ProjectRepository;
+import io.withheld.core.utils.AuthUtils;
+import io.withheld.core.utils.ProjectUtils;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import io.withheld.core.domain.FirebaseUser;
-import io.withheld.core.domain.Project;
-import io.withheld.core.repositories.CodeFileRepository;
-import io.withheld.core.repositories.ProjectRepository;
-import io.withheld.core.utils.AuthUtils;
-import io.withheld.core.utils.ProjectUtils;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j

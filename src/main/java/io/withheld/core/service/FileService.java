@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.service;
 
-import reactor.core.publisher.Mono;
 import io.withheld.core.domain.Project;
+import reactor.core.publisher.Mono;
 
 /**
  * Handles file operations on the host. Events such as scanning for new files and managing last

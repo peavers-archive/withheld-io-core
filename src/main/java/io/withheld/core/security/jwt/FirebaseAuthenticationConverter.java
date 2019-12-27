@@ -3,6 +3,7 @@ package io.withheld.core.security.jwt;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import io.withheld.core.domain.FirebaseUser;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import io.withheld.core.domain.FirebaseUser;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j

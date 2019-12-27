@@ -1,11 +1,10 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.utils;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import io.withheld.core.domain.FirebaseUser;
 import io.withheld.core.domain.Project;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

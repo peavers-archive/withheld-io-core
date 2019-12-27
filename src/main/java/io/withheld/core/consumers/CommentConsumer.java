@@ -1,13 +1,13 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.consumers;
 
+import io.withheld.core.domain.CodeLine;
+import io.withheld.core.domain.Comment;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import io.withheld.core.domain.CodeLine;
-import io.withheld.core.domain.Comment;
 
 @Slf4j
 public class CommentConsumer implements Consumer<CodeLine> {

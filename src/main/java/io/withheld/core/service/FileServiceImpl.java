@@ -1,6 +1,11 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.service;
 
+import io.withheld.core.domain.CodeFile;
+import io.withheld.core.domain.CodeLine;
+import io.withheld.core.domain.Project;
+import io.withheld.core.repositories.CodeFileRepository;
+import io.withheld.core.repositories.ProjectRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,11 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import io.withheld.core.domain.CodeFile;
-import io.withheld.core.domain.CodeLine;
-import io.withheld.core.domain.Project;
-import io.withheld.core.repositories.CodeFileRepository;
-import io.withheld.core.repositories.ProjectRepository;
 
 /**
  * Implementation of the {@link FileService}.

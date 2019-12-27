@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.service;
 
+import io.withheld.core.domain.Project;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +14,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 import reactor.core.publisher.Mono;
-import io.withheld.core.domain.Project;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Slf4j

@@ -1,10 +1,9 @@
 /* Licensed under Apache-2.0 */
 package io.withheld.core.controllers;
 
-import java.util.concurrent.ExecutionException;
-
 import io.withheld.core.domain.Project;
 import io.withheld.core.service.ProjectService;
+import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;

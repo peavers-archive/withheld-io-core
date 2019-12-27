@@ -2,9 +2,9 @@
 package io.withheld.core.configuration;
 
 import com.google.firebase.auth.FirebaseAuth;
-import java.util.Collections;
-
+import io.withheld.core.security.bearer.BearerTokenReactiveAuthenticationManager;
 import io.withheld.core.security.jwt.FirebaseAuthenticationConverter;
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -15,7 +15,6 @@ import org.springframework.security.web.server.util.matcher.ServerWebExchangeMat
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import io.withheld.core.security.bearer.BearerTokenReactiveAuthenticationManager;
 
 /** @author Chris Turner (chris@forloop.space) */
 @Configuration
