@@ -35,7 +35,7 @@ dependencies {
     implementation 'org.eclipse.jgit:org.eclipse.jgit:5.6.0.201912101111-r'
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'org.zeroturnaround:zt-zip:1.13'
+    implementation 'org.zeroturnaround:zt-zip:1.14'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
