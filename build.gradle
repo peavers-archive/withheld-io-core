@@ -30,7 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    implementation 'com.google.firebase:firebase-admin:6.15.0'
+    implementation 'com.google.firebase:firebase-admin:6.16.0'
     implementation 'com.google.cloud:google-cloud-storage:1.111.2'
     implementation 'org.eclipse.jgit:org.eclipse.jgit:5.8.1.202007141445-r'
     implementation 'commons-io:commons-io:2.7'
