@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:7.0.0'
     implementation 'com.google.cloud:google-cloud-storage:1.113.0'
     implementation 'org.eclipse.jgit:org.eclipse.jgit:5.8.1.202007141445-r'
-    implementation 'commons-io:commons-io:2.7'
+    implementation 'commons-io:commons-io:2.8.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.zeroturnaround:zt-zip:1.14'
 
