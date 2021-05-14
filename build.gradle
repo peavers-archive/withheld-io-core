@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'com.google.firebase:firebase-admin:7.3.0'
-    implementation 'com.google.cloud:google-cloud-storage:1.113.16'
+    implementation 'com.google.cloud:google-cloud-storage:1.114.0'
     implementation 'org.eclipse.jgit:org.eclipse.jgit:5.11.0.202103091610-r'
     implementation 'commons-io:commons-io:2.8.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
